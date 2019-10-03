@@ -1,6 +1,8 @@
 package com.wondercat.testapp.entity;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "WarehouseEmployee")
@@ -14,9 +16,13 @@ public class WarehouseEmployee {
     @Column(name = "Name_WarehouseEmployee")
     private String name;
 
+    @OneToMany(mappedBy = "warehouseEmployee", cascade = CascadeType.ALL)
+    private List<Orders> orders = new ArrayList<Orders>();
+
     public WarehouseEmployee(String name) {
         this.name = name;
     }
+
 
     public WarehouseEmployee() {
     }
