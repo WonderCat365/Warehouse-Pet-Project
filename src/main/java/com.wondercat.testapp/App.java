@@ -1,23 +1,26 @@
 package com.wondercat.testapp;
 
+//import com.wondercat.testapp.configuration.AppConfiguration;
+import com.wondercat.testapp.configuration.AppConfiguration;
 import com.wondercat.testapp.entity.Orders;
 import com.wondercat.testapp.entity.WarehouseEmployee;
 import com.wondercat.testapp.service.OrderService;
 import com.wondercat.testapp.service.WarehouseEmployeeService;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.data.domain.Sort;
 
-import java.util.Arrays;
 import java.util.Date;
 
 public class App {
 
     public static void main(String[] args){
 
-        ClassPathXmlApplicationContext context =
-                new ClassPathXmlApplicationContext("Spring.xml");
+        ApplicationContext context =
+                new AnnotationConfigApplicationContext(AppConfiguration.class);
 
-//        OrderService orderService = context.getBean(OrderService.class);
+//        ClassPathXmlApplicationContext context =
+//                new ClassPathXmlApplicationContext("Spring.xml");
 
         WarehouseEmployeeService warehouseEmployeeService = context.
                 getBean(WarehouseEmployeeService.class);
@@ -41,6 +44,5 @@ public class App {
         for(Orders orders : orderService.listAll()){
             System.out.println(orders);
         }
-
     }
 }
