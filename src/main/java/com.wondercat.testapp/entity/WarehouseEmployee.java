@@ -7,14 +7,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-
 @Table(name = "WarehouseEmployee")
 public class WarehouseEmployee {
 
     @Id
     @Column(name = "ID_WarehouseEmployee")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
 
     @Column(name = "Name_WarehouseEmployee")
     private String name;
@@ -30,7 +29,7 @@ public class WarehouseEmployee {
     public WarehouseEmployee() {
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

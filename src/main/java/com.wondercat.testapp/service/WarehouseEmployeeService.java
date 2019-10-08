@@ -18,6 +18,19 @@ public class WarehouseEmployeeService {
         repository.save(employee);
     }
 
+    public WarehouseEmployee getWarehouseEmployeeById(long id){
+        return repository.getOne(id);
+    }
+
+    public WarehouseEmployee getWarehouseEmployeeByName(String name){
+
+        return repository.findByName(name);
+    }
+
+    public void deleteAll(){
+        repository.deleteAll();
+    }
+
     public void addAll(Collection<WarehouseEmployee> employees){
         repository.saveAll(employees);
     }

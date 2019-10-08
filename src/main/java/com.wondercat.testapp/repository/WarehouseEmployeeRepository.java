@@ -11,4 +11,8 @@ public interface WarehouseEmployeeRepository extends
 
     List<WarehouseEmployee> findAll();
 
+    WarehouseEmployee findByName(String name);
+
+//    void deleteAll();
+
 }
