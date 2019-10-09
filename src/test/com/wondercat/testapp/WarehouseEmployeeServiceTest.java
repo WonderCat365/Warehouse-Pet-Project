@@ -19,7 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class WarehouseEmployeeServiceTest {
 
     private final long WAREHOUSEEMPLOYEE_ID = 1;
-    private final String WAREHOUSEEMPLOYEE_NAME = String.valueOf((int)(0 + Math.random()*100));
+    private final String WAREHOUSEEMPLOYEE_NAME = String.valueOf((int)(0 +
+            Math.random()*100));
 
     @Autowired
     private WarehouseEmployeeService warehouseEmployeeService;
