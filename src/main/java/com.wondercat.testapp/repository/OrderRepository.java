@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrderRepository extends JpaRepository<Orders, Long> {
 
-    public List<Orders> findAll();
+    List<Orders> findAll();
 }

@@ -25,8 +25,12 @@ public class WarehouseEmployee {
         this.name = name;
     }
 
-
     public WarehouseEmployee() {
+    }
+
+    public WarehouseEmployee(long id, String name){
+        this.id = id;
+        this.name = name;
     }
 
     public long getId() {

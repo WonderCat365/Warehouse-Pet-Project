@@ -4,6 +4,7 @@ import com.wondercat.testapp.entity.WarehouseEmployee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public interface WarehouseEmployeeRepository extends
@@ -11,8 +12,12 @@ public interface WarehouseEmployeeRepository extends
 
     List<WarehouseEmployee> findAll();
 
-    WarehouseEmployee findByName(String name);
+    Optional<WarehouseEmployee> findByName(String name);
 
-//    void deleteAll();
+    Optional<WarehouseEmployee> findById(Long id);
+
+    void deleteById(Long id);
+
+    Optional<WarehouseEmployee> findFirstByOrderByIdDesc();
 
 }

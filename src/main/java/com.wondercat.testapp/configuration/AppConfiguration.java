@@ -14,16 +14,19 @@ import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
+@EnableWebMvc
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
-@ComponentScan("com.wondercat.testapp.service")
-@EnableJpaRepositories(basePackages = "com.wondercat.testapp.repository", entityManagerFactoryRef = "entityManagerFactoryBean")
+@ComponentScan(basePackages = "com.wondercat.testapp")
+@EnableJpaRepositories(basePackages = "com.wondercat.testapp.repository",
+        entityManagerFactoryRef = "entityManagerFactoryBean")
 public class AppConfiguration {
 
     @Autowired
@@ -47,6 +50,13 @@ public class AppConfiguration {
         return em;
     }
 
+    /**
+     * Need to configure connection to database.
+     * This bean get data from application.properties file
+     *
+     * @return bean with information describes Spring
+     * how to connect to database
+     */
     @Bean
     public DataSource dataSource(){
 
