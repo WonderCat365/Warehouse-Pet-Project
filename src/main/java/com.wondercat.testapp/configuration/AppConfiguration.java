@@ -29,8 +29,12 @@ import java.util.Properties;
         entityManagerFactoryRef = "entityManagerFactoryBean")
 public class AppConfiguration {
 
+    private final Environment environment;
+
     @Autowired
-    private Environment environment;
+    public AppConfiguration(Environment environment) {
+        this.environment = environment;
+    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactoryBean(){
@@ -69,7 +73,6 @@ public class AppConfiguration {
         return dataSource;
     }
 
-    // хз зачем
     @Bean
     public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory){
 

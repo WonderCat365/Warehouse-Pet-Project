@@ -1,13 +1,23 @@
 package com.wondercat.testapp.entity;
 
-import org.springframework.context.annotation.Bean;
+import com.sun.istack.NotNull;
+import lombok.*;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "WarehouseEmployee")
+@Table(
+        name = "WarehouseEmployee",
+        uniqueConstraints = @UniqueConstraint(
+                columnNames = "Name_WarehouseEmployee")
+)
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@ToString
+@Builder(toBuilder = true)
 public class WarehouseEmployee {
 
     @Id
@@ -15,45 +25,15 @@ public class WarehouseEmployee {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "Name_WarehouseEmployee")
+    @Column(
+            name = "Name_WarehouseEmployee",
+            unique = true)
     private String name;
 
-    @OneToMany(mappedBy = "warehouseEmployee", cascade = CascadeType.ALL)
-    private List<Orders> orders = new ArrayList<Orders>();
-
-    public WarehouseEmployee(String name) {
-        this.name = name;
-    }
-
-    public WarehouseEmployee() {
-    }
-
-    public WarehouseEmployee(long id, String name){
-        this.id = id;
-        this.name = name;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "WarehouseEmployee{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
-    }
+    @Column(name = "Orders_WarehouseEmployee")
+    @OneToMany(
+            fetch = FetchType.EAGER,
+            mappedBy = "warehouseEmployee",
+            cascade = CascadeType.ALL)
+    private List<Orders> orders;
 }

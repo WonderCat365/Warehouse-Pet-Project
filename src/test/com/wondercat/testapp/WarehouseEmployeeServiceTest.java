@@ -12,7 +12,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -25,12 +24,13 @@ class WarehouseEmployeeServiceTest {
 
     private String WAREHOUSEEMPLOYEE_NAME = "NAME";
     private static int COUNTER;
-    private Optional<WarehouseEmployee> optionalWarehouseEmployeeTest;
-    private final String FULL_QUALIFIED_NAME = "com.wondercat.testapp." +
-            "service.WarehouseEmployeeService";
+
+    private WarehouseEmployeeService warehouseEmployeeService;
 
     @Autowired
-    private WarehouseEmployeeService warehouseEmployeeService;
+    WarehouseEmployeeServiceTest(WarehouseEmployeeService warehouseEmployeeService) {
+        this.warehouseEmployeeService = warehouseEmployeeService;
+    }
 
     WarehouseEmployeeService getWarehouseEmployeeService() {
         return warehouseEmployeeService;
@@ -39,15 +39,15 @@ class WarehouseEmployeeServiceTest {
     @Test
     void checkActualClassIsWired_Test(){
 
-        assertThat(getWarehouseEmployeeService().getClass().getName()).
-                isEqualTo(FULL_QUALIFIED_NAME);
+        assertThat(getWarehouseEmployeeService() != null).isTrue();
     }
 
     @Test
     void addWarehouseEmployee_Test(){
 
-        getWarehouseEmployeeService().add(new WarehouseEmployee(
-                WAREHOUSEEMPLOYEE_NAME));
+        getWarehouseEmployeeService().add(WarehouseEmployee.builder().
+                name(WAREHOUSEEMPLOYEE_NAME).
+                build());
 
         assertThat(getOptionalWarehouseEmployeeName(WAREHOUSEEMPLOYEE_NAME)).
                 isEqualTo(WAREHOUSEEMPLOYEE_NAME);
@@ -56,10 +56,14 @@ class WarehouseEmployeeServiceTest {
     @Test
     void deleteAll_Test(){
 
-        getWarehouseEmployeeService().add(new WarehouseEmployee(
-                WAREHOUSEEMPLOYEE_NAME));
+        getWarehouseEmployeeService().add(WarehouseEmployee.builder().
+                name(WAREHOUSEEMPLOYEE_NAME).
+                build());
+
         assertThat(getWarehouseEmployeeService().listAll()).isNotEmpty();
+
         getWarehouseEmployeeService().deleteAll();
+
         assertThat(getWarehouseEmployeeService().listAll()).isEmpty();
     }
 
@@ -73,9 +77,11 @@ class WarehouseEmployeeServiceTest {
     void addAll_Test(){
 
         getWarehouseEmployeeService().addAll(Arrays.asList(
-                new WarehouseEmployee(WAREHOUSEEMPLOYEE_NAME),
-                new WarehouseEmployee(WAREHOUSEEMPLOYEE_NAME +
-                        WAREHOUSEEMPLOYEE_NAME)));
+                WarehouseEmployee.builder().
+                        name(WAREHOUSEEMPLOYEE_NAME).build(),
+                WarehouseEmployee.builder().
+                        name(WAREHOUSEEMPLOYEE_NAME + WAREHOUSEEMPLOYEE_NAME).
+                        build()));
 
         assertThat(getOptionalWarehouseEmployeeName(WAREHOUSEEMPLOYEE_NAME)).
                 isEqualTo(WAREHOUSEEMPLOYEE_NAME);
@@ -96,8 +102,7 @@ class WarehouseEmployeeServiceTest {
         };
 
         idBeforeAdd = lambdaWarehouseEmployeeId.get();
-        getWarehouseEmployeeService().add(new WarehouseEmployee(
-                WAREHOUSEEMPLOYEE_NAME + WAREHOUSEEMPLOYEE_NAME));
+        getWarehouseEmployeeService().add(WarehouseEmployee.builder().name(WAREHOUSEEMPLOYEE_NAME).build());
         assertThat(idBeforeAdd).isLessThan(lambdaWarehouseEmployeeId.get());
 
     }
@@ -106,25 +111,38 @@ class WarehouseEmployeeServiceTest {
     void getWarehouseEmployeeByName_Test(){
 
         getWarehouseEmployeeService().add(
-                new WarehouseEmployee(WAREHOUSEEMPLOYEE_NAME));
+                WarehouseEmployee.builder().name(WAREHOUSEEMPLOYEE_NAME).build());
         assertThat(getOptionalWarehouseEmployeeName(WAREHOUSEEMPLOYEE_NAME)).
                 isEqualTo(WAREHOUSEEMPLOYEE_NAME);
     }
 
     @Test
     void deleteWarehouseEmployee_Test(){
-        getWarehouseEmployeeService().add(new WarehouseEmployee(
-                WAREHOUSEEMPLOYEE_NAME));
+        getWarehouseEmployeeService().add(WarehouseEmployee.builder().name(WAREHOUSEEMPLOYEE_NAME).build());
         assertThat(getOptionalWarehouseEmployeeName(WAREHOUSEEMPLOYEE_NAME)).
                 isEqualTo(WAREHOUSEEMPLOYEE_NAME);
 
     }
 
     @Test
+    void uniqueName_Test(){
+        WarehouseEmployee warehouseEmployee = WarehouseEmployee.builder().
+                name(WAREHOUSEEMPLOYEE_NAME).
+                build();
+
+        getWarehouseEmployeeService().add(warehouseEmployee);
+        getWarehouseEmployeeService().add(warehouseEmployee);
+//        System.out.println(getWarehouseEmployeeService().listAll().stream().filter(name -> name.getName().equals(WAREHOUSEEMPLOYEE_NAME)).count());
+        assertThat(getWarehouseEmployeeService().listAll().stream().
+                filter(employee -> employee.getName().
+                        equals(WAREHOUSEEMPLOYEE_NAME)).
+                count()).isEqualTo(1L);
+    }
+
+    @Test
     void updateWarehouseEmployeeName_Test(){
 
-        getWarehouseEmployeeService().add(new WarehouseEmployee(
-                WAREHOUSEEMPLOYEE_NAME));
+        getWarehouseEmployeeService().add(WarehouseEmployee.builder().name(WAREHOUSEEMPLOYEE_NAME).build());
 
         getWarehouseEmployeeService().updateWarehouseEmployeeName(
                 getWarehouseEmployeeService().getWarehouseEmployeeByName(
@@ -147,12 +165,11 @@ class WarehouseEmployeeServiceTest {
      * object isn't founded
      */
     private String getOptionalWarehouseEmployeeName(String name){
-        System.out.println();
-        optionalWarehouseEmployeeTest = getWarehouseEmployeeService().
-                getWarehouseEmployeeByName(name);
 
-        return optionalWarehouseEmployeeTest.isPresent()
-                ? optionalWarehouseEmployeeTest.get().getName()
+        return getWarehouseEmployeeService().
+                getWarehouseEmployeeByName(name).isPresent()
+                ? getWarehouseEmployeeService().
+                getWarehouseEmployeeByName(name).get().getName()
                 : "NONE";
     }
 

@@ -1,10 +1,18 @@
 package com.wondercat.testapp.entity;
 
+import lombok.*;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Table(name = "Orders")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@Builder(toBuilder = true)
 public class Orders {
 
     @Id
@@ -12,6 +20,7 @@ public class Orders {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @ToString.Exclude
     @JoinColumn(name = "ID_WarehouseEmployee", nullable = false)
     @ManyToOne(targetEntity = WarehouseEmployee.class)
     private WarehouseEmployee warehouseEmployee;
@@ -23,47 +32,4 @@ public class Orders {
     @Column(name = "DateCreation_Orders")
     @Temporal(TemporalType.DATE)
     private Date dateCreation;
-
-    public Orders(WarehouseEmployee warehouseEmployee, Date dateExecution, Date dateCreation) {
-        this.warehouseEmployee = warehouseEmployee;
-        this.dateExecution = dateExecution;
-        this.dateCreation = dateCreation;
-    }
-
-    public Orders() {
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Date getDateExecution() {
-        return dateExecution;
-    }
-
-    public void setDateExecution(Date dateExecution) {
-        this.dateExecution = dateExecution;
-    }
-
-    public Date getDateCreation() {
-        return dateCreation;
-    }
-
-    public void setDateCreation(Date dateCreation) {
-        this.dateCreation = dateCreation;
-    }
-
-    @Override
-    public String toString() {
-        return "Orders{" +
-                "id=" + id +
-                ", warehouseEmployee=" + warehouseEmployee +
-                ", dateExecution=" + dateExecution +
-                ", dateCreation=" + dateCreation +
-                '}';
-    }
 }
